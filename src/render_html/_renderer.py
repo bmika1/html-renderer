@@ -31,7 +31,7 @@ def _open_in_browser(file_path: str, browser: str | None = None) -> None:
     client.open_new(file_path)
 
 
-def _handle_open_from_temp(html_string: str, browser: str | None = None) -> None:
+def _handle_open_from_temp(html_string: str, browser: str | None = None, encoding: str | None = None) -> None:
     """
     Handle opening HTML content from a temporary file in a web browser.
 
@@ -40,12 +40,14 @@ def _handle_open_from_temp(html_string: str, browser: str | None = None) -> None
         browser (str | None, optional): The web browser to use (i.e. "chrome", "safari").
             If provided, the HTML content will be opened using the specified browser.
             If not provided or set to None, the default browser will be used.
+        encoding (str | None, optional): The encoding to use when writing to the file.
+            If not provided or set to None, the default encoding will be used.
     """
     # Set delete parameter depending on the platform
     autodelete = platform.system() != "Windows"
 
     with tempfile.NamedTemporaryFile(
-        mode="w", delete=autodelete, suffix=".html"
+        mode="w", delete=autodelete, suffix=".html", encoding=encoding
     ) as tmp_file:
         tmp_file.write(html_string)
         file_path = tmp_file.name
@@ -61,7 +63,8 @@ def _handle_open_from_temp(html_string: str, browser: str | None = None) -> None
 
 
 def _handle_open_from_regular_file(
-    html_string: str, save_path: str, browser: str | None = None
+    html_string: str, save_path: str, browser: str | None = None,
+    encoding: str | None = None
 ) -> None:
     """
     Handle opening HTML content from a regular file in a web browser.
@@ -72,14 +75,17 @@ def _handle_open_from_regular_file(
         browser (str | None, optional): The executable path of the web browser to use.
             If provided, the HTML content will be opened using the specified browser.
             If not provided or set to None, the default browser will be used.
+        encoding (str | None, optional): The encoding to use when writing to the file.
+            If not provided or set to None, the default encoding will be used.
     """
-    with open(save_path, "w") as f:
+    with open(save_path, "w", encoding=encoding) as f:
         f.write(html_string)
     _open_in_browser(save_path, browser)
 
 
 def render_in_browser(
-    html_string: str, save_path: str | None = None, browser: str | None = None
+    html_string: str, save_path: str | None = None, browser: str | None = None,
+    encoding: str | None = None
 ) -> None:
     """
     Render the HTML content in a web browser.
@@ -95,8 +101,10 @@ def render_in_browser(
         browser (str | None, optional): The web browser to use (i.e. "chrome", "safari").
             If provided, the HTML content will be opened using the specified browser.
             If not provided or set to None, the default browser will be used.
+        encoding (str | None, optional): The encoding to use when writing to the file.
+            If not provided or set to None, the default encoding will be used.
     """
     if save_path:
-        _handle_open_from_regular_file(html_string, save_path, browser)
+        _handle_open_from_regular_file(html_string, save_path, browser, encoding)
     else:
-        _handle_open_from_temp(html_string, browser)
+        _handle_open_from_temp(html_string, browser, encoding)

@@ -42,6 +42,9 @@ Render the HTML content in a web browser.
 - `browser` (str, optional): The name of the web browser to use (i.e., "chrome", "safari").
   If provided, the HTML content will be opened using the specified browser.
   If not provided or set to None, the default browser will be used.
+- `encoding` (str, optional) the encoding method you want to encode your content
+  If not provided, the default option will be chosen 
+
 
 
 ## License
