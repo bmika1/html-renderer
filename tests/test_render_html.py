@@ -15,8 +15,9 @@ class RendererTestCase(unittest.TestCase):
         cls.html_string = "<html><body><h1>Hello, World!</h1></body></html>"
         cls.save_path = "/path/to/save/file.html"
         cls.temp_path = "/path/to/temp/file.html"
+        cls.selected_encoding = "utf-8"
 
-    def test_handle_open_from_regular_file(self):
+    def test_handle_open_from_regular_file_default_encoding(self):
         with patch("builtins.open", create=True) as mock_open, patch(
             "webbrowser.open_new"
         ) as mock_webbrowser_open:
@@ -24,11 +25,25 @@ class RendererTestCase(unittest.TestCase):
             mock_file.name = self.save_path
             mock_open.return_value.__enter__.return_value = mock_file
             _handle_open_from_regular_file(self.html_string, self.save_path)
-            mock_open.assert_called_once_with(self.save_path, "w")
+            mock_open.assert_called_once_with(self.save_path, "w", encoding = None)
             mock_file.write.assert_called_once_with(self.html_string)
             mock_webbrowser_open.assert_called_once_with(f"file:///{mock_file.name}")
 
-    def test_handle_open_from_temp(self):
+    
+    def test_handle_open_from_regular_file_selected_encoding(self):
+        with patch("builtins.open", create=True) as mock_open, patch(
+            "webbrowser.open_new"
+        ) as mock_webbrowser_open:
+            mock_file = MagicMock()
+            mock_file.name = self.save_path
+            mock_open.return_value.__enter__.return_value = mock_file
+            _handle_open_from_regular_file(self.html_string, self.save_path, encoding = self.selected_encoding)
+            mock_open.assert_called_once_with(self.save_path, "w", encoding = self.selected_encoding)
+            mock_file.write.assert_called_once_with(self.html_string)
+            mock_webbrowser_open.assert_called_once_with(f"file:///{mock_file.name}")
+
+
+    def test_handle_open_from_temp_default_encoding(self):
         with patch("tempfile.NamedTemporaryFile", create=True) as mock_tempfile, patch(
             "webbrowser.open_new"
         ) as mock_webbrowser_open:
@@ -36,11 +51,24 @@ class RendererTestCase(unittest.TestCase):
             mock_tempfile.return_value.__enter__.return_value = mock_file
             mock_file.name = self.temp_path
             _handle_open_from_temp(self.html_string)
-            mock_tempfile.assert_called_once_with(mode="w", delete=True, suffix=".html")
+            mock_tempfile.assert_called_once_with(mode="w", delete=True, suffix=".html", encoding = None)
             mock_file.write.assert_called_once_with(self.html_string)
             mock_webbrowser_open.assert_called_once_with(f"file:///{mock_file.name}")
 
-    def test_render_in_browser_save_path(self):
+
+    def test_handle_open_from_temp_selected_encoding(self):
+        with patch("tempfile.NamedTemporaryFile", create=True) as mock_tempfile, patch(
+            "webbrowser.open_new"
+        ) as mock_webbrowser_open:
+            mock_file = MagicMock()
+            mock_tempfile.return_value.__enter__.return_value = mock_file
+            mock_file.name = self.temp_path
+            _handle_open_from_temp(self.html_string, encoding = self.selected_encoding)
+            mock_tempfile.assert_called_once_with(mode="w", delete=True, suffix=".html", encoding = self.selected_encoding)
+            mock_file.write.assert_called_once_with(self.html_string)
+            mock_webbrowser_open.assert_called_once_with(f"file:///{mock_file.name}")
+
+    def test_render_in_browser_save_path_default_encoding(self):
         with patch("builtins.open", create=True) as mock_open, patch(
             "webbrowser.open_new"
         ) as mock_webbrowser_open:
@@ -48,11 +76,24 @@ class RendererTestCase(unittest.TestCase):
             mock_file.name = self.save_path
             mock_open.return_value.__enter__.return_value = mock_file
             render_in_browser(self.html_string, save_path=self.save_path)
-            mock_open.assert_called_once_with(self.save_path, "w")
+            mock_open.assert_called_once_with(self.save_path, "w", encoding = None)
             mock_file.write.assert_called_once_with(self.html_string)
             mock_webbrowser_open.assert_called_once_with(f"file:///{mock_file.name}")
 
-    def test_render_in_browser_temp_file(self):
+
+    def test_render_in_browser_save_path_selected_encoding(self):
+        with patch("builtins.open", create=True) as mock_open, patch(
+            "webbrowser.open_new"
+        ) as mock_webbrowser_open:
+            mock_file = MagicMock()
+            mock_file.name = self.save_path
+            mock_open.return_value.__enter__.return_value = mock_file
+            render_in_browser(self.html_string, save_path=self.save_path, encoding=self.selected_encoding)
+            mock_open.assert_called_once_with(self.save_path, "w", encoding = self.selected_encoding)
+            mock_file.write.assert_called_once_with(self.html_string)
+            mock_webbrowser_open.assert_called_once_with(f"file:///{mock_file.name}")
+
+    def test_render_in_browser_temp_file_default_encoding(self):
         with patch("tempfile.NamedTemporaryFile", create=True) as mock_tempfile, patch(
             "webbrowser.open_new"
         ) as mock_webbrowser_open:
@@ -60,7 +101,20 @@ class RendererTestCase(unittest.TestCase):
             mock_tempfile.return_value.__enter__.return_value = mock_file
             mock_file.name = self.temp_path
             render_in_browser(self.html_string)
-            mock_tempfile.assert_called_once_with(mode="w", delete=True, suffix=".html")
+            mock_tempfile.assert_called_once_with(mode="w", delete=True, suffix=".html", encoding = None)
+            mock_file.write.assert_called_once_with(self.html_string)
+            mock_webbrowser_open.assert_called_once_with(f"file:///{mock_file.name}")
+
+
+    def test_render_in_browser_temp_file_selected_encoding(self):
+        with patch("tempfile.NamedTemporaryFile", create=True) as mock_tempfile, patch(
+            "webbrowser.open_new"
+        ) as mock_webbrowser_open:
+            mock_file = MagicMock()
+            mock_tempfile.return_value.__enter__.return_value = mock_file
+            mock_file.name = self.temp_path
+            render_in_browser(self.html_string, encoding=self.selected_encoding)
+            mock_tempfile.assert_called_once_with(mode="w", delete=True, suffix=".html", encoding = self.selected_encoding)
             mock_file.write.assert_called_once_with(self.html_string)
             mock_webbrowser_open.assert_called_once_with(f"file:///{mock_file.name}")
 
