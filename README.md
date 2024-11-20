@@ -29,7 +29,7 @@ ren(html_content)
 
 ## Documentation
 
-### `render_in_browser(html_string, save_path=None, browser=None)`
+### `render_in_browser(html_string, save_path=None, browser=None, encoding=None)`
 
 Render the HTML content in a web browser.
 
