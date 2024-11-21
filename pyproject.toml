@@ -3,10 +3,10 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "render_html"
-version = "1.0.1"
+name = "render_html_v2"
+version = "1.0.0"
 authors = [
-  { name="Bartlomiej Mika", email="bmika1@icloud.com" },
+  { name="Emmanuel Bastidas", email="EmmanuelBastidas@tutanota.com" },
 ]
 description = "Python library that provides a simple way to render HTML content in a web browser."
 readme = "README.md"
@@ -18,5 +18,5 @@ classifiers = [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/bmika1/render-html"
-"Bug Tracker" = "https://github.com/bmika1/render-html/issues"
+"Homepage" = "https://github.com/ank634/render-html"
+"Bug Tracker" = "https://github.com/ank634/render-html/issues"

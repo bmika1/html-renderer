@@ -1,15 +1,16 @@
-# render_html
+# render_html_v2
 
-`render_html` is a Python library that provides a simple way to render HTML content in a web browser. 
+`render_html_v2` is a fork of the library render_html by bmika1 found here 
+https://github.com/bmika1/render-html it keeps the api the same but gives you the option to include your own encoding.
 It allows you to open HTML content directly from a string or save it to a file and open it from the file.
 You can also specify the name of a browser to use a non-default browser. Please refer to [webbrowser documentation](https://docs.python.org/3/library/webbrowser.html) for the complete list of predefined browsers.
 This library is especially useful for quickly visualizing and testing HTML content in a web browser environment.
 
 ## Installation
 
-You can install `render_html` using pip:
+You can install `render_html_v2` using pip:
 
-pip install render-html
+pip install render-html-v2
 
 NOTE: the library requires Python 3.10 or newer
 
